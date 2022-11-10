@@ -62,7 +62,6 @@ namespace CheckingBrokenLinks
                     if (url.Contains(mainLink) || (!url.StartsWith("http://") && !url.StartsWith("https://")))
                     {
                         allLinks.Add(url);
-                        Console.WriteLine(url);
 
                         if (url.Contains(mainLink))
                             CheckGetAllLinks(mainLink, url, ref allLinks);
@@ -101,9 +100,9 @@ namespace CheckingBrokenLinks
             {
                 CheckAllLinks(CheckNumberOfArguments(args), ref validLinks, ref invalidLinks, ref allLinks);
 
-                using (StreamWriter validFile = new StreamWriter("valid.txt"))
+                using (StreamWriter validFile = new StreamWriter("../../../valid.txt"))
                 {
-                    using (StreamWriter invalidFile = new StreamWriter("invalid.txt"))
+                    using (StreamWriter invalidFile = new StreamWriter("../../../invalid.txt"))
                     {
                         WriteLinks(validFile, validLinks);
                         WriteLinks(invalidFile, invalidLinks);
