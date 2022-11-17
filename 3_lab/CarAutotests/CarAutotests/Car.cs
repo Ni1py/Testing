@@ -18,61 +18,11 @@ namespace CarAutotests
 
         public bool IsTurnedOn() => m_statusEngine;
 
-        Direction GetDirection() => m_direction;
+        public Direction GetDirection() => m_direction;
 
         public int GetSpeed() => m_speed;
 
         public int GetGear() => m_gear;
-
-        public bool IsSetDirection(int gear)
-        {
-            switch (gear)
-            {
-                case -1:
-                    return ((m_direction == Direction.back) || (m_direction == Direction.standing));
-                case 0:
-                    return true;
-                case 1:
-                    return ((m_direction == Direction.standing) || (m_direction == Direction.forward));
-            }
-            for (int i = 2; i < 6; i++)
-                if (gear == i)
-                    return m_direction == Direction.forward;
-
-            return false;
-        }
-
-        bool IsSetGear(int gear)
-        {
-            switch (gear)
-            {
-                case -1:
-                    return (m_speed == Limit[0, 0] && IsTurnedOn());
-                case 0:
-                    return true;
-            }
-            for (int i = 1; i < 6; i++)
-                if (i == gear)
-                    return ((m_speed >= Limit[i, 0]) && (m_speed <= Limit[i, 1]) && IsTurnedOn());
-
-            return false;
-        }
-
-        public bool IsSetSpeed(int speed)
-        {
-            switch (m_gear)
-            {
-                case -1:
-                    return ((speed >= Limit[0, 0]) && (speed <= Limit[0, 1]));
-                case 0:
-                    return speed <= m_speed;
-            }
-            for (int i = 1; i < 6; i++)
-                if (i == m_gear)
-                    return ((speed >= Limit[i, 0]) && (speed <= Limit[i, 1]));
-
-            return false;
-        }
 
         public bool TurnOnEngine()
         {
@@ -106,6 +56,56 @@ namespace CarAutotests
             return true;
         }
 
+        private bool IsSetDirection(int gear)
+        {
+            switch (gear)
+            {
+                case -1:
+                    return ((m_direction == Direction.back) || (m_direction == Direction.standing));
+                case 0:
+                    return true;
+                case 1:
+                    return ((m_direction == Direction.standing) || (m_direction == Direction.forward));
+            }
+            for (int i = 2; i < 6; i++)
+                if (gear == i)
+                    return m_direction == Direction.forward;
+
+            return false;
+        }
+
+        private bool IsSetGear(int gear)
+        {
+            switch (gear)
+            {
+                case -1:
+                    return (m_speed == Limit[0, 0] && IsTurnedOn());
+                case 0:
+                    return true;
+            }
+            for (int i = 1; i < 6; i++)
+                if (i == gear)
+                    return ((m_speed >= Limit[i, 0]) && (m_speed <= Limit[i, 1]) && IsTurnedOn());
+
+            return false;
+        }
+
+        private bool IsSetSpeed(int speed)
+        {
+            switch (m_gear)
+            {
+                case -1:
+                    return ((speed >= Limit[0, 0]) && (speed <= Limit[0, 1]));
+                case 0:
+                    return speed <= m_speed;
+            }
+            for (int i = 1; i < 6; i++)
+                if (i == m_gear)
+                    return ((speed >= Limit[i, 0]) && (speed <= Limit[i, 1]));
+
+            return false;
+        }
+
         private void SetDirection()
         {
             if ((m_gear == -1) && (m_speed > 0))
@@ -117,7 +117,7 @@ namespace CarAutotests
         }
 
         private int[,] Limit =
-                                                    {
+            {
                 {0, 20},
                 {0, 30},
                 {20, 50},
