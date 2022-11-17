@@ -5,13 +5,16 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
+//statler.ru
+//koptelnya.ru
+
 namespace CheckingBrokenLinks
 {
     class Program
     {
-        private static void CheckAllLinks(string mainLink, ref List<string> validLinks, ref List<string> invalidLinks, ref List<string> allLinks)
+        private static void GettingStatusCodes(string mainLink, ref List<string> validLinks, ref List<string> invalidLinks, ref List<string> allLinks, StreamWriter stream)
         {
-            CheckGetAllLinks(mainLink, mainLink, ref allLinks);
+            CheckGetLinks(mainLink, mainLink, ref allLinks, stream);
             allLinks.Add(mainLink);
 
             HttpClient client = new HttpClient();
@@ -36,11 +39,11 @@ namespace CheckingBrokenLinks
             }
         }
 
-        private static void CheckGetAllLinks(string mainLink, string link, ref List<string> allLinks)
+        private static void CheckGetLinks(string mainLink, string link, ref List<string> allLinks, StreamWriter stream)
         {
             try
             {
-                GetAllLinks(mainLink, link, ref allLinks);
+                GetLinks(mainLink, link, ref allLinks, stream);
             }
             catch (System.ArgumentNullException)
             {
@@ -48,7 +51,14 @@ namespace CheckingBrokenLinks
             }
         }
 
-        private static void GetAllLinks(string mainLink, string link, ref List<string> allLinks)
+        private static bool CheckHref(string href)
+        {
+            return (!href.StartsWith("http://") && !href.StartsWith("https://") && (href != "/") &&
+                !href.Contains("tel:") && !href.Contains("mailto:") && !href.Contains("tg:")) &&
+                !href.Contains("javascript:") && !href.Contains("viber:") && !href.Contains(":") ? true : false;
+        }
+
+        private static void GetLinks(string mainLink, string link, ref List<string> allLinks, StreamWriter stream)
         {
             HtmlWeb htmlWeb = new HtmlWeb();
             HtmlDocument htmlDocument = htmlWeb.Load(link);
@@ -57,22 +67,27 @@ namespace CheckingBrokenLinks
             foreach (var node in htmlNodes)
             {
                 string url = node.GetAttributeValue("href", null);
+                if (url != null)
+                    url = url.Replace(" ", "");
                 if (!allLinks.Contains(url) && Uri.IsWellFormedUriString(url, UriKind.RelativeOrAbsolute))
                 {
-                    if (url.Contains(mainLink) || (!url.StartsWith("http://") && !url.StartsWith("https://")))
+                    if (url.Contains(mainLink) || CheckHref(url))
                     {
+                        stream.WriteLine($"Parent: {link}");
+                        stream.WriteLine($"Child: {url}");
+
                         allLinks.Add(url);
 
                         if (url.Contains(mainLink))
-                            CheckGetAllLinks(mainLink, url, ref allLinks);
+                            CheckGetAllLinks(link, url, ref allLinks, stream);
                         else
-                            CheckGetAllLinks(mainLink, mainLink + url, ref allLinks);
+                            CheckGetAllLinks(mainLink, mainLink + url, ref allLinks, stream);
                     }
                 }
             }
         }
 
-        private static string CheckNumberOfArguments(string[] args)
+        private static string CheckArgumentsAndReturn(string[] args)
         {
             if (args.Length != 1)
                 throw new Exception("Invalid number of arguments");
@@ -98,14 +113,17 @@ namespace CheckingBrokenLinks
 
             try
             {
-                CheckAllLinks(CheckNumberOfArguments(args), ref validLinks, ref invalidLinks, ref allLinks);
-
-                using (StreamWriter validFile = new StreamWriter("../../../valid.txt"))
+                using (StreamWriter usefulFile = new StreamWriter("../../../useful_information_about_links.txt"))
                 {
-                    using (StreamWriter invalidFile = new StreamWriter("../../../invalid.txt"))
+                    GettingStatusCodes(CheckArgumentsAndReturn(args), ref validLinks, ref invalidLinks, ref allLinks, usefulFile);
+
+                    using (StreamWriter validFile = new StreamWriter("../../../valid.txt"))
                     {
-                        WriteLinks(validFile, validLinks);
-                        WriteLinks(invalidFile, invalidLinks);
+                        using (StreamWriter invalidFile = new StreamWriter("../../../invalid.txt"))
+                        {
+                            WriteLinks(validFile, validLinks);
+                            WriteLinks(invalidFile, invalidLinks);
+                        }
                     }
                 }
             }

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "CheckingBrokenLinks": {
+      "commandName": "Project",
+      "commandLineArgs": "http://links.qatl.ru/"
+    }
+  }
+}
