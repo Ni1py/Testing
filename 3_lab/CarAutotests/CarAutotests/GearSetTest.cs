@@ -4,25 +4,8 @@ namespace CarAutotests
 {
     public class GearSetTest
     {
-        //[Fact]
-        //public void The_gear_will_not_set_to_2_if_the_engine_is_on_and_the_installed_gear_is_1_because_the_speed_is_not_dialed()
-        //{
-        //    //Arrange
-        //    Car car = new Car();
-        //    car.TurnOnEngine();
-        //    car.SetGear(1);
-
-        //    //Act
-        //    bool isSetGear = car.SetGear(2);
-
-        //    //Assert
-        //    Assert.False(isSetGear);
-        //    Assert.Equal(1, car.GetGear());
-        //    Assert.Equal(Car.Direction.standing, car.GetDirection());
-        //}
-
         [Fact]
-        public void The_gear_will_not_set_if_the_engine_is_on_and_the_switchable_gear_is_10_because_there_is_no_such_gear()
+        public void The_gear_will_not_set_when_the_shifted_gear_does_not_fit() //передача не переключится так как такой передачи нет
         {
             //Arrange
             Car car = new Car();
@@ -33,10 +16,11 @@ namespace CarAutotests
 
             //Assert
             Assert.False(isSetGear);
+            Assert.Equal(0, car.GetGear());
         }
 
         [Fact]
-        public void The_gear_will_not_set_to_back_but_direction_will_set_to_back_if_the_engine_is_on_and_the_installed_gear_is_0_and_installed_speed_is_non_zero()
+        public void Gear_will_not_shift_to_reverse_after_accelerating_backwards_and_going_to_0_gear() //передача не переключится на заднюю после разгона назад и установки 0 передачи
         {
             //Arrange
             Car car = new Car();
@@ -54,22 +38,42 @@ namespace CarAutotests
             Assert.Equal(Car.Direction.back, car.GetDirection());
         }
 
-        //[Fact]
-        //public void The_gear_will_not_set_to_1_and_direction_will_set_to_back_if_the_engine_is_on_and_the_installed_gear_is_back_and_installed_speed_is_non_zero()
-        //{
-        //    //Arrange
-        //    Car car = new Car();
-        //    car.TurnOnEngine();
-        //    car.SetGear(-1);
-        //    car.SetSpeed(10);
+        [Fact]
+        public void Transmission_and_direction_to_shift_to_reverse_after_starting_the_engine_and_accelerating() //передача и на направление переключаться на задние из нейтралки и последующего разгона
+        {
+            //Arrange
+            Car car = new Car();
+            car.TurnOnEngine();
 
-        //    //Act
-        //    bool isSetGear = car.SetGear(1);
+            //Act
+            bool isSetGear = car.SetGear(-1);
+            bool isSetSpeed = car.SetSpeed(10);
 
-        //    //Assert
-        //    Assert.False(isSetGear);
-        //    Assert.Equal(-1, car.GetGear());
-        //    Assert.Equal(Car.Direction.back, car.GetDirection());
-        //}
+            //Assert
+            Assert.True(isSetGear);
+            Assert.True(isSetSpeed);
+            Assert.Equal(-1, car.GetGear());
+            Assert.Equal(Car.Direction.back, car.GetDirection());
+            Assert.Equal(10, car.GetSpeed());
+        }
+
+        [Fact]
+        public void The_gear_shifts_to_2_when_the_minimum_possible_speed_is_reached() //передача переключится на 2 когда достигнута минимальная возможная скорость и направление будет вперед
+        {
+            //Arrange
+            Car car = new Car();
+            car.TurnOnEngine();
+            car.SetGear(1);
+            car.SetSpeed(20);
+
+            //Act
+            bool isSetGear = car.SetGear(2);
+
+            //Assert
+            Assert.True(isSetGear);
+            Assert.Equal(2, car.GetGear());
+            Assert.Equal(Car.Direction.forward, car.GetDirection());
+            Assert.Equal(20, car.GetSpeed());
+        }
     }
 }
