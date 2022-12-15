@@ -2,7 +2,7 @@
   "profiles": {
     "CheckingBrokenLinks": {
       "commandName": "Project",
-      "commandLineArgs": "http://links.qatl.ru/"
+      "commandLineArgs": "https://www.ispringacademy.ru/"
     }
   }
 }

@@ -55,7 +55,7 @@ namespace CheckingBrokenLinks
         {
             return (!href.StartsWith("http://") && !href.StartsWith("https://") && (href != "/") &&
                 !href.Contains("tel:") && !href.Contains("mailto:") && !href.Contains("tg:")) &&
-                !href.Contains("javascript:") && !href.Contains("viber:") && !href.Contains(":") ? true : false;
+                !href.Contains("javascript:") && !href.Contains("viber:") ? true : false;
         }
 
         private static void GetLinks(string mainLink, string link, ref List<string> allLinks, StreamWriter stream)
@@ -79,20 +79,12 @@ namespace CheckingBrokenLinks
                         allLinks.Add(url);
 
                         if (url.Contains(mainLink))
-                            CheckGetAllLinks(link, url, ref allLinks, stream);
+                            CheckGetLinks(link, url, ref allLinks, stream);
                         else
-                            CheckGetAllLinks(mainLink, mainLink + url, ref allLinks, stream);
+                            CheckGetLinks(mainLink, mainLink + url, ref allLinks, stream);
                     }
                 }
             }
-        }
-
-        private static string CheckArgumentsAndReturn(string[] args)
-        {
-            if (args.Length != 1)
-                throw new Exception("Invalid number of arguments");
-
-            return args[0];
         }
 
         private static void WriteLinks(StreamWriter stream, List<string> links)
@@ -113,19 +105,21 @@ namespace CheckingBrokenLinks
 
             try
             {
-                using (StreamWriter usefulFile = new StreamWriter("../../../useful_information_about_links.txt"))
-                {
-                    GettingStatusCodes(CheckArgumentsAndReturn(args), ref validLinks, ref invalidLinks, ref allLinks, usefulFile);
-
-                    using (StreamWriter validFile = new StreamWriter("../../../valid.txt"))
+                if (args.Length == 1)
+                    using (StreamWriter usefulFile = new StreamWriter("../../../useful_information_about_links.txt"))
                     {
-                        using (StreamWriter invalidFile = new StreamWriter("../../../invalid.txt"))
+                        GettingStatusCodes(args[0], ref validLinks, ref invalidLinks, ref allLinks, usefulFile);
+
+                        using (StreamWriter validFile = new StreamWriter("../../../valid.txt"))
                         {
-                            WriteLinks(validFile, validLinks);
-                            WriteLinks(invalidFile, invalidLinks);
+                            using (StreamWriter invalidFile = new StreamWriter("../../../invalid.txt"))
+                            {
+                                WriteLinks(validFile, validLinks);
+                                WriteLinks(invalidFile, invalidLinks);
+                            }
                         }
                     }
-                }
+                else throw new Exception("Invalid number of arguments");
             }
             catch (Exception e)
             {

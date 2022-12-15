@@ -1,10 +1,8 @@
-http://links.qatl.ru/../links/locked.php 423 Locked
-http://links.qatl.ru/../links/404not404found404.php 404 NotFound
-http://links.qatl.ru/../links/return500bad.php 500 InternalServerError
-http://links.qatl.ru/../links/deny403forbidden.php 403 Forbidden
-http://links.qatl.ru/../links/502gateaway502.php 502 BadGateway
-http://links.qatl.ru/../links/teapot418.php 500 InternalServerError
-http://links.qatl.ru/../links/un503availible.php 503 ServiceUnavailable
-http://links.qatl.ru/../links/access401unauthorized.php 401 Unauthorized
-Number of links: 8
-Date of verification: 17.11.2022 12:04:09
+https://www.ispringacademy.ru/courses/team-managment/team-leader 404 NotFound
+https://www.ispringacademy.ru//cart/view?p=isscenariocoursepro&q=1 404 NotFound
+https://www.ispringacademy.ru//cart/view?p=isscenariocoursestandart&q=1 404 NotFound
+https://www.ispringacademy.ru//cart/view?p=isecoursecreationpro&q=1 404 NotFound
+https://www.ispringacademy.ru//cart/view?p=isecoursecreation&q=1 404 NotFound
+https://www.ispringacademy.ru//cart/view?p=iscertificationru&q=1 404 NotFound
+Number of links: 6
+Date of verification: 15.12.2022 19:51:19
