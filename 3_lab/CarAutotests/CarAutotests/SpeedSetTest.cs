@@ -5,6 +5,20 @@ namespace CarAutotests
     public class SpeedSetTest
     {
         [Fact]
+        public void The_speed_will_not_set_if_engine_not_turn_on() //скорость нельзя переключить так как двигатель не включен
+        {
+            //Arrange
+            Car car = new Car();
+
+            //Act
+            bool isSetSpeed = car.SetSpeed(10);
+
+            //Assert
+            Assert.False(isSetSpeed);
+            Assert.False(car.IsTurnedOn());
+        }
+
+        [Fact]
         public void The_speed_will_not_set_if_installed_gear_is_0() //скорость нельзя переключить на 0 передаче
         {
             //Arrange

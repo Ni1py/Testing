@@ -26,12 +26,16 @@ namespace CarAutotests
 
         public bool TurnOnEngine()
         {
+            if (IsTurnedOn())
+                return false;
             m_statusEngine = true;
             return true;
         }
 
         public bool TurnOffEngine()
         {
+            if (!IsTurnedOn())
+                return false;
             if ((m_gear != 0) || (m_speed != 0))
                 return false;
             m_statusEngine = false;

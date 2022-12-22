@@ -5,6 +5,20 @@ namespace CarAutotests
     public class GearSetTest
     {
         [Fact]
+        public void The_speed_will_not_set_if_engine_not_turn_on() //передачу нельзя переключить так как двигатель не включен
+        {
+            //Arrange
+            Car car = new Car();
+
+            //Act
+            bool isSeGear = car.SetGear(1);
+
+            //Assert
+            Assert.False(isSeGear);
+            Assert.False(car.IsTurnedOn());
+        }
+
+        [Fact]
         public void The_gear_will_not_set_when_the_shifted_gear_does_not_fit() //передача не переключится так как такой передачи нет
         {
             //Arrange

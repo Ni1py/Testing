@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.32126.315
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarAutotests", "CarAutotests\CarAutotests.csproj", "{E4EB6555-8EC5-405B-9D86-6CDB078502D0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarAutotests", "CarAutotests\CarAutotests.csproj", "{E4EB6555-8EC5-405B-9D86-6CDB078502D0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{37B03A98-2A28-41A7-AC60-17EE25A3DEDF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
